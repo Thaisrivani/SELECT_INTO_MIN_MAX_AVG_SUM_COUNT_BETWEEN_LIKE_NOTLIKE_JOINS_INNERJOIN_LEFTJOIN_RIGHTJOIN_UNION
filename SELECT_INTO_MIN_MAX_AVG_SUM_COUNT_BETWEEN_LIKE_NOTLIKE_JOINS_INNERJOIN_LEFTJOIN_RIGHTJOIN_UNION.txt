@@ -1,3 +1,6 @@
+--Tenho um banco chamado Loja com as tabelas 'Categorias', 'Clientes', 'Clientes_inativos', 'Endereco', 'Estoque', 'Funcionario', 'Produto' e 'Vendas'.
+--Criado por mim para realização de exercícios.
+
 -- SELECT INTO 
 --1.Foi solicitado uma tabela de 'ProdutosComEstoqueBaixo' para armazenar os detalhes dos produtos que possuem quantidade de estoque menor que 100.
 
