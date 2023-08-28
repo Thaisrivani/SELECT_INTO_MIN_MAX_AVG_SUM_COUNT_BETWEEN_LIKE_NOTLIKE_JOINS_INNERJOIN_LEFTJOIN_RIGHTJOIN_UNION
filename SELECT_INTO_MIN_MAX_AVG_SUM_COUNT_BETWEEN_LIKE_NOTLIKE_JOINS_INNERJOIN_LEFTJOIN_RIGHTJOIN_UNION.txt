@@ -1,0 +1,124 @@
+-- SELECT INTO 
+--1.Foi solicitado uma tabela de 'ProdutosComEstoqueBaixo' para armazenar os detalhes dos produtos que possuem quantidade de estoque menor que 100.
+
+USE Loja
+GO
+SELECT * 
+INTO ProdutoComEstoqueBaixo
+FROM Estoque
+WHERE Quantidade <100
+
+--Para visualizar a tabela inteira 'ProdutoComEstoqueBaixo' criada.
+SELECT *FROM ProdutoComEstoqueBaixo
+
+--2.(INTO)Solicitado criar uma tabela com os top 3 produtos mais caros.
+
+USE Loja
+GO
+SELECT TOP 3 *
+INTO ProdutosMaiorValor
+FROM Produto
+ORDER BY Preco DESC
+
+--Para visualizar a tabela inteira 'ProdutosMaiorValor' criada.
+SELECT *FROM ProdutosMaiorValor
+
+-- FUNÇOES AGREGADAS. MIN,MAX,AVG,SUM e COUNT.
+--1.(MIN) Determine a data do pedido mais antigo realizado.
+
+USE Loja
+GO 
+SELECT MIN (DataVenda) AS DataMaisAntigaDaVenda
+FROM Vendas
+
+--2.(MAX) Encontre o preço máximo de um produto em cada categoria.
+
+USE Loja
+GO
+SELECT MAX (Preco) AS PrecoMaximo
+FROM Produto 
+
+--3.(AVG) Encontre o valor médio dos produtos em estoque.
+
+USE Loja
+GO
+SELECT AVG(Preco) AS ValorMedioDosProdutos
+FROM Produto
+
+--4.(SUM) Calcule a quantidade total de produtos em estoque.
+
+USE Loja
+GO
+SELECT SUM(Quantidade) AS QuantidadeTotalEmEstoque
+FROM Estoque
+
+--5.(COUNT) Calcular o número total de clientes ativos.
+
+USE Loja
+GO 
+SELECT COUNT(*) AS NumeroTotalDeClientesAtivos
+FROM Clientes
+WHERE IDCliente NOT IN (SELECT IDCliente FROM Clientes_inativos)
+
+--BETWEEN 
+--1.Selecione todos os produtos cujo preço está entre R$50 e R$100.
+
+USE Loja
+GO
+SELECT *
+FROM Produto
+WHERE Preco BETWEEN 50 AND 100
+
+-- LIKE E NOT LIKE
+--1.(LIKE) Selecione os produtos cujo nome começa com "Camiseta".
+
+USE Loja
+GO
+SELECT *
+FROM Produto
+WHERE Nome LIKE 'Camiseta%'
+
+--2.(NOT LIKE) Encontre os clientes cujo nome não contém a palavra "Inativo".
+
+USE Loja
+GO
+SELECT *
+FROM Clientes
+WHERE Nome NOT LIKE '%Inativo%'
+
+--JOINS. INNER JOIN 
+--1.Selecione toda informação referente ao produto e sua categoria.
+
+USE Loja
+GO
+SELECT *
+FROM Produto P
+INNER JOIN Categorias C 
+ON P.IDCategoria = C.IDCategoria
+
+--JOINS. LEFT JOIN
+--2. Encontre os clientes e os detalhes de suas vendas, incluindo clientes que não fizeram nenhuma compra.
+
+USE Loja
+GO
+SELECT CL.IDCliente, CL.Nome, CL.Email, V.DataVenda
+FROM Clientes CL
+LEFT JOIN Vendas V
+ON CL.IDCliente = V.IDCliente
+
+--JOINS.(LEFT JOIN e RIGHT JOIN  COM UNION) 
+
+--1.Trazer todos os clientes, incluindo clientes inativos com email e data de venda realizado.
+
+SELECT CL.Nome, CL.Email, V.DataVenda
+FROM Clientes CL
+LEFT JOIN Vendas V
+ON CL.IDCliente = V.IDCliente
+
+UNION
+
+SELECT CLI.Nome, CLI.Email, V.DataVenda
+FROM Clientes_inativos CLI
+RIGHT JOIN Vendas V
+ON CLI.IDCliente = V.IDCliente
+WHERE CLI.Email IS NULL
